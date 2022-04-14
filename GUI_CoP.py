@@ -40,6 +40,7 @@ def Select_data_from_memory_for_1_force_plate():
                          skiprows=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
                          header=None)
         print(df)
+
         X = int(Entry_X.get())
         Y = int(Entry_Y.get())
         print(type(X))
@@ -66,12 +67,12 @@ def Select_data_from_memory_for_1_force_plate():
                 Width_and_Hight_label.config(bg="black", foregroun="orange")
             def original_color ():
                 Width_and_Hight_label.config(bg="orange", foregroun="black")
-            Select_Data_Button.after(0, change_color)
-            Select_Data_Button.after(150, original_color)
-            Select_Data_Button.after(300, change_color)
-            Select_Data_Button.after(450, original_color)
-            Select_Data_Button.after(600, change_color)
-            Select_Data_Button.after(750, original_color)
+            Select_Data_Button_1_plate.after(0, change_color)
+            Select_Data_Button_1_plate.after(150, original_color)
+            Select_Data_Button_1_plate.after(300, change_color)
+            Select_Data_Button_1_plate.after(450, original_color)
+            Select_Data_Button_1_plate.after(600, change_color)
+            Select_Data_Button_1_plate.after(750, original_color)
 
 def Select_data_from_memory_for_2_force_plates():
     if Entry_Y.get() and Entry_X.get():
@@ -90,8 +91,10 @@ def Select_data_from_memory_for_2_force_plates():
                          skiprows=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
                          header=None)
         print(df)
+
         X = int(Entry_X.get())
         Y = int(Entry_Y.get())
+        print(X,Y)
         print(type(X))
         global list_X_coordinates_left_plate,\
             list_Y_coordinates_left_plate,\
@@ -101,21 +104,29 @@ def Select_data_from_memory_for_2_force_plates():
             list_Y_coordinates_both_plates
         list_X_coordinates_left_plate = []
         list_Y_coordinates_left_plate = []
+        Fx0= df[2]
+        F00= df[1]
+        F0z= df[3]
+        Fxz= df[4]
         for i in range(len(df[1])):
             F_all = df[1][i] + df[2][i] + df[3][i] + df[4][i]
-            x_coordinate = ((X) / 2) * (1 + (((df[3][i] + df[4][i]) - (df[1][i] + df[2][i])) / F_all))
+            x_coordinate = ((X) / 2) * (1 + (((Fx0[i] + Fxz[i]) - (F00[i] + F0z[i])) / F_all))
             list_X_coordinates_left_plate.append(x_coordinate)
-            y_coordinate = ((Y) / 2) * (1 + (((df[2][i] + df[4][i]) - (df[1][i] + df[3][i])) / F_all))
+            y_coordinate = ((Y) / 2) * (1 + (((F0z[i] + Fx0[i]) - (F00[i] + Fxz[i])) / F_all))
             list_Y_coordinates_left_plate.append(y_coordinate)
         print(list_X_coordinates_left_plate)
 
         list_X_coordinates_right_plate = []
         list_Y_coordinates_right_plate = []
+        Fx0R = df[7]
+        F00R = df[6]
+        F0zR = df[8]
+        FxzR = df[9]
         for i in range(len(df[1])):
             F_all = df[6][i] + df[7][i] + df[8][i] + df[9][i]
-            x_coordinate = ((X) / 2) * (1 + (((df[8][i] + df[9][i]) - (df[6][i] + df[7][i])) / F_all))
+            x_coordinate = ((X) / 2) * (1 + (((Fx0R[i] + FxzR[i]) - (F00R[i] + F0zR[i])) / F_all))
             list_X_coordinates_right_plate.append(x_coordinate)
-            y_coordinate = ((Y) / 2) * (1 + (((df[7][i] + df[9][i]) - (df[6][i] + df[8][i])) / F_all))
+            y_coordinate = ((Y) / 2) * (1 + (((F0zR[i] + Fx0R[i]) - (F00R[i] + FxzR[i])) / F_all))
             list_Y_coordinates_right_plate.append(y_coordinate)
         print(list_X_coordinates_right_plate)
 
@@ -125,11 +136,12 @@ def Select_data_from_memory_for_2_force_plates():
             list_X_coordinates_both_plates.append((list_X_coordinates_left_plate[i] + list_X_coordinates_right_plate[i]) / 2)
             list_Y_coordinates_both_plates.append((list_Y_coordinates_left_plate[i] + list_Y_coordinates_right_plate[i]) / 2)
 
-        plt.plot(list_X_coordinates_right_plate, list_Y_coordinates_right_plate, label='Rigth leg')
-        plt.plot(list_X_coordinates_left_plate, list_Y_coordinates_left_plate, label='Left leg')
+        # plt.plot(list_X_coordinates_right_plate, list_Y_coordinates_right_plate, label='Rigth leg')
+        # plt.plot(list_X_coordinates_left_plate, list_Y_coordinates_left_plate, label='Left leg')
         plt.plot(list_X_coordinates_both_plates, list_Y_coordinates_both_plates, label='Both legs')
         plt.legend()
         plt.show()
+
 
         """Dictionary_CoP = {'X coordinates of Right plate': list_X_coordinates_right_plate,
                           'Y coordinates of Right plate': list_Y_coordinates_right_plate,
@@ -145,12 +157,12 @@ def Select_data_from_memory_for_2_force_plates():
                 Width_and_Hight_label.config(bg="black", foregroun="orange")
             def original_color ():
                 Width_and_Hight_label.config(bg="orange", foregroun="black")
-            Select_Data_Button.after(0, change_color)
-            Select_Data_Button.after(150, original_color)
-            Select_Data_Button.after(300, change_color)
-            Select_Data_Button.after(450, original_color)
-            Select_Data_Button.after(600, change_color)
-            Select_Data_Button.after(750, original_color)
+            Select_Data_Button_2_plates.after(0, change_color)
+            Select_Data_Button_2_plates.after(150, original_color)
+            Select_Data_Button_2_plates.after(300, change_color)
+            Select_Data_Button_2_plates.after(450, original_color)
+            Select_Data_Button_2_plates.after(600, change_color)
+            Select_Data_Button_2_plates.after(750, original_color)
 def close_win(e):
    root.destroy()
 root.bind('<Escape>',lambda e: close_win(e))
